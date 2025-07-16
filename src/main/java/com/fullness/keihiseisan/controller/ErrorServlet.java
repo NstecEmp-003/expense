@@ -16,32 +16,32 @@ import com.fullness.keihiseisan.model.exception.ApplicationException;
 public class ErrorServlet extends HttpServlet {
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userMessage = "エラーが発生しました。";
-        ApplicationException sessionError = (ApplicationException) req.getSession().getAttribute("error");
+        ApplicationException sessionError = (ApplicationException) request.getSession().getAttribute("error");
         // セッションからエラー情報を取得
         if (sessionError != null) {
             userMessage = sessionError.getUserMessage();
-            req.getSession().removeAttribute("error");
+            request.getSession().removeAttribute("error");
         }
-        req.setAttribute("errorMessage", userMessage);
-        req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
+        request.setAttribute("errorMessage", userMessage);
+        request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
     }
     /**
      * POSTリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp); // GETリクエストと同じ処理を行う
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response); // GETリクエストと同じ処理を行う
     }
 }

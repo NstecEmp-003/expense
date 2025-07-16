@@ -19,38 +19,38 @@ import com.fullness.keihiseisan.model.value.User;
 public class ApprovalListServlet extends BaseServlet {
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // ログインチェック
-            HttpSession session = req.getSession(false);
+            HttpSession session = request.getSession(false);
             if (session == null || session.getAttribute("loginUser") == null) {
-                resp.sendRedirect(req.getContextPath() + "/login");
+                response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
             User loginUser = (User) session.getAttribute("loginUser");
             // アクセス権チェック
             if (loginUser.getRoleId() < 2) { // 課長以上でない場合
                  session.setAttribute("errorMessage", "承認状況一覧を表示する権限がありません。");
-                 resp.sendRedirect(req.getContextPath() + "/menu");
+                 response.sendRedirect(request.getContextPath() + "/menu");
                  return;
             }
             // 承認状況一覧データ取得
             ApprovalService service = new ApprovalService();
             List<ExpenseApplication> list = service.getDepartmentApplications(loginUser);
-            req.setAttribute("applicationList", list);
+            request.setAttribute("applicationList", list);
             if(list.isEmpty()) {
-                req.setAttribute("message", "担当部署の申請データはありません。");
+                request.setAttribute("message", "担当部署の申請データはありません。");
             }
             // 承認状況一覧画面表示
-            req.getRequestDispatcher("/WEB-INF/jsp/approval/list.jsp").forward(req, resp);
+            request.getRequestDispatcher("/WEB-INF/jsp/approval/list.jsp").forward(request, response);
         } catch (Exception e) {
-            handleSystemError(req, resp, e);
+            handleSystemError(request, response, e);
             return;
         }
     }

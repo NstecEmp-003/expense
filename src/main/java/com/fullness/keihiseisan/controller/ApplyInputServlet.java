@@ -37,64 +37,64 @@ import com.fullness.keihiseisan.model.util.FileUploadUtil;
 public class ApplyInputServlet extends BaseServlet {
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // ログインチェック
-            loginCheck(req, resp);
+            loginCheck(request, response);
             // 権限チェック
-            roleCheck(req, resp, role.EMPLOYEE);
+            roleCheck(request, response, role.EMPLOYEE);
             // CSRFトークンの生成と設定
             String csrfToken = UUID.randomUUID().toString();
-            HttpSession session = req.getSession(false);
+            HttpSession session = request.getSession(false);
             session.setAttribute("csrfToken", csrfToken);
-            req.setAttribute("csrfToken", csrfToken);
+            request.setAttribute("csrfToken", csrfToken);
             // 申請日の初期値として本日の日付を設定
-            req.setAttribute("today", LocalDate.now().toString());
+            request.setAttribute("today", LocalDate.now().toString());
             // エラーメッセージの取得
             List<String> errorMessages = (List<String>) session.getAttribute("errorMessages");
             if (errorMessages != null) {
-                req.setAttribute("errorMessages", errorMessages);
+                request.setAttribute("errorMessages", errorMessages);
                 session.removeAttribute("errorMessages");
             }
             // 勘定科目リストの取得
             ExpenseApplicationService service = new ExpenseApplicationService();
             List<Account> accounts = service.readAllAccounts();
-            req.setAttribute("accounts", accounts);
-            req.getRequestDispatcher("/WEB-INF/jsp/expense/apply/input.jsp").forward(req, resp);
+            request.setAttribute("accounts", accounts);
+            request.getRequestDispatcher("/WEB-INF/jsp/expense/apply/input.jsp").forward(request, response);
         } catch (ApplicationException e) {
-            resp.setContentType("text/plain; charset=UTF-8");
-            e.printStackTrace(resp.getWriter());
+            response.setContentType("text/plain; charset=UTF-8");
+            e.printStackTrace(response.getWriter());
             return;
         } catch (Exception e) {
-            handleSystemError(req, resp, e);
+            handleSystemError(request, response, e);
             return;
         }
     }
 
     /**
      * POSTリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // ログインチェック
-            loginCheck(req, resp);
+            loginCheck(request, response);
             // 権限チェック
-            roleCheck(req, resp, role.EMPLOYEE);
+            roleCheck(request, response, role.EMPLOYEE);
             // CSRFトークンの検証
-            HttpSession session = req.getSession(false);
+            HttpSession session = request.getSession(false);
             String sessionToken = (String) session.getAttribute("csrfToken");
-            String requestToken = req.getParameter("csrfToken");
+            String requestToken = request.getParameter("csrfToken");
             if (sessionToken == null || !sessionToken.equals(requestToken)) {
                 throw new ServletException("不正なリクエストです。");
             }
@@ -107,12 +107,12 @@ public class ApplyInputServlet extends BaseServlet {
             expense.setApplicantUserId(loginUser.getUserId());
             System.out.println("DTOの設定: " + expense.getApplicantUserId());
             // 入力値の取得とサニタイズ
-            String applicationDate = req.getParameter("applicationDate");
-            String accountId = req.getParameter("accountId");
-            String paymentDate = req.getParameter("paymentDate");
-            String payee = req.getParameter("payee");
-            String amount = req.getParameter("amount");
-            String description = req.getParameter("description");
+            String applicationDate = request.getParameter("applicationDate");
+            String accountId = request.getParameter("accountId");
+            String paymentDate = request.getParameter("paymentDate");
+            String payee = request.getParameter("payee");
+            String amount = request.getParameter("amount");
+            String description = request.getParameter("description");
             System.out.println("申請日の取得: " + applicationDate);
             System.out.println("勘定科目の取得: " + accountId);
             System.out.println("支払日の取得: " + paymentDate);
@@ -127,7 +127,7 @@ public class ApplyInputServlet extends BaseServlet {
             expense.setAmount(ValidationUtil.isEmpty(amount) ? 0 : Integer.parseInt(amount));
             expense.setDescription(description);
             // ファイルを取得
-            Part filePart = req.getPart("receiptFile");
+            Part filePart = request.getPart("receiptFile");
             // サービスのインスタンス化
             ExpenseApplicationService service = new ExpenseApplicationService();
             // バリデーション実行（ファイルの検証を含む）
@@ -135,15 +135,15 @@ public class ApplyInputServlet extends BaseServlet {
             errorMessages = service.validateApplication(expense, filePart);
             if (!errorMessages.isEmpty()) {
                 // エラーがある場合は入力画面に戻る
-                req.setAttribute("errorMessages", errorMessages);
-                req.setAttribute("expense", expense);
+                request.setAttribute("errorMessages", errorMessages);
+                request.setAttribute("expense", expense);
                 List<Account> accounts = service.readAllAccounts();
-                req.setAttribute("accounts", accounts);
+                request.setAttribute("accounts", accounts);
                 // CSRFトークンを再生成
                 String newCsrfToken = UUID.randomUUID().toString();
                 session.setAttribute("csrfToken", newCsrfToken);
-                req.setAttribute("csrfToken", newCsrfToken);
-                req.getRequestDispatcher("/WEB-INF/jsp/expense/apply/input.jsp").forward(req, resp);
+                request.setAttribute("csrfToken", newCsrfToken);
+                request.getRequestDispatcher("/WEB-INF/jsp/expense/apply/input.jsp").forward(request, response);
                 return;
             }
             // ファイルの保存
@@ -160,12 +160,12 @@ public class ApplyInputServlet extends BaseServlet {
             }
             // セッションに保存して確認画面へ
             session.setAttribute("expenseInput", expense);
-            resp.sendRedirect(req.getContextPath() + "/expense/apply/confirm");
+            response.sendRedirect(request.getContextPath() + "/expense/apply/confirm");
         } catch (ApplicationException e) {
-            handleError(req, resp, e);
+            handleError(request, response, e);
             return;
         } catch (Exception e) {
-            handleSystemError(req, resp, e);
+            handleSystemError(request, response, e);
             return;
         }
     }

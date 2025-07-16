@@ -24,23 +24,23 @@ import com.fullness.keihiseisan.model.value.ExpenseApplication;
 public class DownloadServlet extends BaseServlet {
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // パラメーター取得
-            String idStr = req.getParameter("id");
-            String fileNameFromParam = req.getParameter("filename");
+            String idStr = request.getParameter("id");
+            String fileNameFromParam = request.getParameter("filename");
             // パラメーター検証
             if ((idStr == null || idStr.isEmpty()) && (fileNameFromParam == null || fileNameFromParam.isEmpty())) {
                 //throw new BusinessException("申請IDまたはファイル名が指定されていません。");
             }
             // パラメーター検証（ダウンロードかサムネイル表示かで処理を分けるため）
-            String viewMode = req.getParameter("view");
+            String viewMode = request.getParameter("view");
             boolean isThumbnail = "thumbnail".equals(viewMode);
             // ファイルダウンロード処理
             String receiptFileName = null;
@@ -83,21 +83,21 @@ public class DownloadServlet extends BaseServlet {
             } else {
                 contentType = "application/octet-stream";
             }
-            resp.setContentType(contentType);
+            response.setContentType(contentType);
             // サムネイル表示かダウンロードかで送信するHTTPヘッダーを設定
             if (isThumbnail) {
                 // サムネイル表示の場合はContent-Dispositionを設定しない
-                resp.setHeader("Cache-Control", "max-age=86400"); // 1日キャッシュする
+                response.setHeader("Cache-Control", "max-age=86400"); // 1日キャッシュする
             } else {
                 // ダウンロードの場合はContent-Dispositionを設定
-                resp.setHeader("Content-Disposition", "attachment; filename=\"" + receiptFileName + "\"");
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + receiptFileName + "\"");
             }
             // ファイルの送信
-            Files.copy(filePath, resp.getOutputStream());
+            Files.copy(filePath, response.getOutputStream());
         } catch (ApplicationException e) {
-            handleError(req, resp, e);
+            handleError(request, response, e);
         } catch (Exception e) {
-            handleSystemError(req, resp, e);
+            handleSystemError(request, response, e);
         }
     }
 }

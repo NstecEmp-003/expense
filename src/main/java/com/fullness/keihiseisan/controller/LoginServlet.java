@@ -20,53 +20,53 @@ import jakarta.servlet.http.HttpSession;
 public class LoginServlet extends BaseServlet {
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(true);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
         if (session != null && session.getAttribute("loginUser") != null) {
             // ログイン済みの場合、メニュー画面へリダイレクト
-            resp.sendRedirect(req.getContextPath() + "/menu");
+            response.sendRedirect(request.getContextPath() + "/menu");
             return;
         }
         // CSRFトークンの生成と設定
         String csrfToken = UUID.randomUUID().toString();
-        session = req.getSession(true);
+        session = request.getSession(true);
         session.setAttribute("csrfToken", csrfToken);
-        req.setAttribute("csrfToken", csrfToken);
+        request.setAttribute("csrfToken", csrfToken);
         // ログイン画面 (P001) を表示
-        req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
+        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
     }
     /**
      * POSTリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // CSRFトークンの検証
-            HttpSession session = req.getSession(false);
+            HttpSession session = request.getSession(false);
             String sessionToken = (String) session.getAttribute("csrfToken");
-            String requestToken = req.getParameter("csrfToken");
+            String requestToken = request.getParameter("csrfToken");
             if (sessionToken == null || !sessionToken.equals(requestToken)) {
-                req.setAttribute("errorMessage", "セッションが切れました。再度ログインしてください。");
-                req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
+                request.setAttribute("errorMessage", "セッションが切れました。再度ログインしてください。");
+                request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
                 return;
             }
             // ユーザーIDとパスワードの取得
-            String userId = req.getParameter("userId");
-            String password = req.getParameter("password");
+            String userId = request.getParameter("userId");
+            String password = request.getParameter("password");
             if (userId == null || userId.isEmpty() || password == null || password.isEmpty()) {
                  session.removeAttribute("csrfToken");
-                 req.setAttribute("errorMessage", "ユーザーIDとパスワードを入力してください。");
-                 req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
+                 request.setAttribute("errorMessage", "ユーザーIDとパスワードを入力してください。");
+                 request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
                  return;
             }
             // ログイン処理
@@ -82,15 +82,15 @@ public class LoginServlet extends BaseServlet {
                 // ログイン成功
                 session.removeAttribute("csrfToken");
                 session.setAttribute("loginUser", loginUser); // ユーザー情報をセッションに保存
-                resp.sendRedirect(req.getContextPath() + "/menu"); // メニュー画面へリダイレクト
+                response.sendRedirect(request.getContextPath() + "/menu"); // メニュー画面へリダイレクト
             } else {
                 // ログイン失敗
                 session.removeAttribute("csrfToken");
-                req.setAttribute("errorMessage", errorMessage);
-                req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
+                request.setAttribute("errorMessage", errorMessage);
+                request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
             }
         } catch (Exception e) {
-            handleSystemError(req, resp, e);
+            handleSystemError(request, response, e);
             return;
         }
     }

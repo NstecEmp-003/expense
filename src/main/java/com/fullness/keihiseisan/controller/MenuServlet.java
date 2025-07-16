@@ -19,39 +19,39 @@ import jakarta.servlet.http.HttpSession;
 public class MenuServlet extends BaseServlet {
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // ログインチェック
-            loginCheck(req, resp);
+            loginCheck(request, response);
             // セッション
-            HttpSession session = req.getSession(false);
+            HttpSession session = request.getSession(false);
             // 確認画面から「戻る」ボタンでメニューに戻った場合は入力データを破棄
-            if (req.getParameter("clear") != null && "expense".equals(req.getParameter("clear"))) {
+            if (request.getParameter("clear") != null && "expense".equals(request.getParameter("clear"))) {
                 session.removeAttribute("expenseInput");
             }
             User loginUser = (User) session.getAttribute("loginUser");
-            req.setAttribute("loginUserName", loginUser.getUserName()); // JSP表示用
+            request.setAttribute("loginUserName", loginUser.getUserName()); // JSP表示用
             // 不正操作メッセージがあれば表示
             String errorMessage = (String) session.getAttribute("illegalOperationMsg");
             if (errorMessage != null) {
-                req.setAttribute("errorMessage", errorMessage);
+                request.setAttribute("errorMessage", errorMessage);
                 session.removeAttribute("illegalOperationMsg"); // 表示したら消す
             }
             // 承認一覧からのエラーメッセージを削除
             if (session.getAttribute("errorMessage") != null) {
                 session.removeAttribute("errorMessage");
             }
-            req.getRequestDispatcher("/WEB-INF/jsp/menu.jsp").forward(req, resp);
+            request.getRequestDispatcher("/WEB-INF/jsp/menu.jsp").forward(request, response);
         } catch (ApplicationException e) {
-            handleError(req, resp, e);
+            handleError(request, response, e);
         } catch (Exception e) {
-            handleSystemError(req, resp, e);
+            handleSystemError(request, response, e);
         }
     }
 }

@@ -18,42 +18,42 @@ import jakarta.servlet.http.HttpSession;
 public class ApplyCompleteServlet extends BaseServlet {
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // ログインチェック
-        HttpSession session = req.getSession(false);
+        HttpSession session = request.getSession(false);
         if (session == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         // セッションから申請ID取得
         Integer applicationId = (Integer) session.getAttribute("completedApplicationId");
         if (applicationId == null) {
             // URL パラメータからも試す
-            String idParam = req.getParameter("id");
+            String idParam = request.getParameter("id");
             if (idParam != null && !idParam.isEmpty()) {
                 try {
                     applicationId = Integer.parseInt(idParam);
                 } catch (NumberFormatException e) {
-                    handleError(req, resp, new BusinessException("申請IDの変換に失敗しました。"));
+                    handleError(request, response, new BusinessException("申請IDの変換に失敗しました。"));
                 }
             }
             // それでも申請IDがない場合はメニューへリダイレクト
             if (applicationId == null) {
-                resp.sendRedirect(req.getContextPath() + "/menu");
+                response.sendRedirect(request.getContextPath() + "/menu");
                 return;
             }
         }
         // 申請IDをリクエスト属性に設定
-        req.setAttribute("applicationId", applicationId);
+        request.setAttribute("applicationId", applicationId);
         // セッションから申請ID削除（再表示対策）
         session.removeAttribute("completedApplicationId");
         // 完了画面表示
-        req.getRequestDispatcher("/WEB-INF/jsp/expense/apply/complete.jsp").forward(req, resp);
+        request.getRequestDispatcher("/WEB-INF/jsp/expense/apply/complete.jsp").forward(request, response);
     }
 }

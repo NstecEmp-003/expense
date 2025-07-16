@@ -29,22 +29,22 @@ public class DetailServlet extends BaseServlet {
     }
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // セッションからユーザー情報を取得
-            User loginUser = (User) req.getSession().getAttribute("loginUser");
+            User loginUser = (User) request.getSession().getAttribute("loginUser");
             if (loginUser == null) {
-                resp.sendRedirect(req.getContextPath() + "/login");
+                response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
             // URLパラメータから申請IDを取得
-            String idStr = req.getParameter("id");
+            String idStr = request.getParameter("id");
             if (idStr == null || idStr.trim().isEmpty()) {
                 throw new BusinessException("申請IDが指定されていません。");
             }
@@ -63,15 +63,15 @@ public class DetailServlet extends BaseServlet {
                 throw new BusinessException("この申請を閲覧する権限がありません。");
             }
             // リクエスト属性を設定
-            req.setAttribute("expense", expense);
+            request.setAttribute("expense", expense);
             // 詳細画面を表示
-            req.getRequestDispatcher("/WEB-INF/jsp/expense/detail.jsp")
-               .forward(req, resp);
+            request.getRequestDispatcher("/WEB-INF/jsp/expense/detail.jsp")
+               .forward(request, response);
         } catch (ApplicationException e) {
-            handleError(req, resp, e);
+            handleError(request, response, e);
             return;
         } catch (Exception e) {
-            handleSystemError(req, resp, e);
+            handleSystemError(request, response, e);
             return;
         }
     }
