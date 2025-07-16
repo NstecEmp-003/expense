@@ -1,7 +1,7 @@
 package com.fullness.keihiseisan.model.service;
 
 import java.sql.SQLException;
-import java.util.logging.Level;
+//import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.fullness.keihiseisan.model.dao.UserDAO;
@@ -26,7 +26,7 @@ public class LoginService {
      * @throws BusinessException 認証に失敗した場合
      * @throws SystemException データベースアクセスエラーまたはパスワード暗号化エラー
      */
-    public User authenticate(String userId, String password) throws BusinessException, SystemException {
+    public User authenticate(String userId, String password)throws BusinessException, SystemException {
         try (ConnectionManager connectionManager = new ConnectionManager()) {
             UserDAO dao = new UserDAO(connectionManager.getConnection());
             User user = dao.findByUserId(userId);
