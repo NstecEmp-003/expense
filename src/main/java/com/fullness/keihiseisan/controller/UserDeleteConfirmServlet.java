@@ -1,7 +1,7 @@
 package com.fullness.keihiseisan.controller;
 
 import com.fullness.keihiseisan.model.service.UserService;
-import com.fullness.keihiseisan.model.value.Role;
+import com.fullness.keihiseisan.model.value.role;
 import com.fullness.keihiseisan.model.value.User;
 import com.fullness.keihiseisan.model.exception.ApplicationException;
 import jakarta.servlet.ServletException;
@@ -29,7 +29,7 @@ public class UserDeleteConfirmServlet extends BaseServlet {
             // ログインチェック
             loginCheck(request, response);
             // 権限チェック
-            roleCheck(request, response, Role.SYSTEM_ADMIN);
+            roleCheck(request, response, role.SYSTEM_ADMIN);
             // セッション
             HttpSession session = request.getSession(false);
             // 削除対象のユーザーIDを取得
@@ -67,7 +67,7 @@ public class UserDeleteConfirmServlet extends BaseServlet {
             // ログインチェック
             loginCheck(request, response);
             // 権限チェック
-            roleCheck(request, response, Role.SYSTEM_ADMIN);
+            roleCheck(request, response, role.SYSTEM_ADMIN);
             // セッション
             HttpSession session = request.getSession(false);
             // 削除対象のユーザーIDを取得

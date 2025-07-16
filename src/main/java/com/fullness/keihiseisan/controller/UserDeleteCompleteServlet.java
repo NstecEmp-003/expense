@@ -1,7 +1,7 @@
 package com.fullness.keihiseisan.controller;
 
 import java.io.IOException;
-import com.fullness.keihiseisan.model.value.Role;
+import com.fullness.keihiseisan.model.value.role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ public class UserDeleteCompleteServlet extends BaseServlet {
             // ログインチェック
             loginCheck(request, response);
             // 権限チェック
-            roleCheck(request, response, Role.SYSTEM_ADMIN); 
+            roleCheck(request, response, role.SYSTEM_ADMIN);
             // メッセージを取得
             HttpSession session = request.getSession(false);
             String message = (String) session.getAttribute("message");

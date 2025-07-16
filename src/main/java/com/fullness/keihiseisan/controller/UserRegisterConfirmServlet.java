@@ -2,7 +2,7 @@ package com.fullness.keihiseisan.controller;
 
 import java.io.IOException;
 import com.fullness.keihiseisan.model.service.UserService;
-import com.fullness.keihiseisan.model.value.Role;
+import com.fullness.keihiseisan.model.value.role;
 import com.fullness.keihiseisan.model.value.User;
 import com.fullness.keihiseisan.model.exception.ApplicationException;
 import jakarta.servlet.ServletException;
@@ -30,7 +30,7 @@ public class UserRegisterConfirmServlet extends BaseServlet {
             // ログインチェック
             loginCheck(request, response);
             // 権限チェック
-            roleCheck(request, response,Role.SYSTEM_ADMIN);
+            roleCheck(request, response, role.SYSTEM_ADMIN);
             // セッション
             HttpSession session = request.getSession(false);
             // ユーザー登録確認画面表示
@@ -63,7 +63,7 @@ public class UserRegisterConfirmServlet extends BaseServlet {
             // ログインチェック
             loginCheck(request, response);
             // 権限チェック
-            roleCheck(request, response, Role.SYSTEM_ADMIN);
+            roleCheck(request, response, role.SYSTEM_ADMIN);
             // セッション
             HttpSession session = request.getSession(false);
             // ユーザー登録確認画面表示
