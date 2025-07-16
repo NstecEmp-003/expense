@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.checkerframework.checker.units.qual.radians;
-
-import com.fullness.keihiseisan.model.value.role;
 import com.fullness.keihiseisan.model.exception.SystemException;
+import com.fullness.keihiseisan.model.value.role;
 
 /**
  * 役職DAOクラス
