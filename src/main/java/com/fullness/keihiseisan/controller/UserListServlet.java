@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.fullness.keihiseisan.model.service.UserService;
-import com.fullness.keihiseisan.model.value.role;
+import com.fullness.keihiseisan.model.value.Role;
 import com.fullness.keihiseisan.model.value.User;
 import com.fullness.keihiseisan.model.exception.ApplicationException;
 
@@ -33,7 +33,7 @@ public class UserListServlet extends BaseServlet {
             // ログインチェック
             loginCheck(request, response);
             // 権限チェック
-            roleCheck(request, response, role.SYSTEM_ADMIN);
+            roleCheck(request, response, Role.SYSTEM_ADMIN);
             // ユーザー一覧取得
             UserService userService = new UserService();
             List<User> userList = userService.getAllUsers();

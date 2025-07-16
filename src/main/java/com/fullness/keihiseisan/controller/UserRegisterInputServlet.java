@@ -9,7 +9,7 @@ import com.fullness.keihiseisan.model.service.RoleService;
 import com.fullness.keihiseisan.model.exception.ApplicationException;
 import com.fullness.keihiseisan.model.service.UserService;
 import com.fullness.keihiseisan.model.value.Department;
-import com.fullness.keihiseisan.model.value.role;
+import com.fullness.keihiseisan.model.value.Role;
 import com.fullness.keihiseisan.model.value.User;
 
 import jakarta.servlet.ServletException;
@@ -36,12 +36,12 @@ public class UserRegisterInputServlet extends BaseServlet {
             // ログインチェック
             loginCheck(request, response);
             // 権限チェック
-            roleCheck(request, response, role.SYSTEM_ADMIN);
+            roleCheck(request, response, Role.SYSTEM_ADMIN);
             // セッション
             HttpSession session = request.getSession(false);
             // DBから部署と役職の情報を取得する
             List<Department> departmentList = new ArrayList<>();
-            List<role> roleList = new ArrayList<>();
+            List<Role> roleList = new ArrayList<>();
             DepartmentService departmentService = new DepartmentService();
             RoleService roleService = new RoleService();
             departmentList = departmentService.getAllDepartments();
@@ -92,7 +92,7 @@ public class UserRegisterInputServlet extends BaseServlet {
             // ログインチェック
             loginCheck(request, response);
             // 権限チェック
-            roleCheck(request, response, role.SYSTEM_ADMIN);
+            roleCheck(request, response, Role.SYSTEM_ADMIN);
             // セッション
             HttpSession session = request.getSession(false);
             // パラメーターを取得
@@ -138,7 +138,7 @@ public class UserRegisterInputServlet extends BaseServlet {
                 }
                 
                 if (inputUser.getRoleId() > 0) {
-                    role role = roleService.getRoleById(inputUser.getRoleId());
+                    Role role = roleService.getRoleById(inputUser.getRoleId());
                     inputUser.setRoleName(role.getRoleName());
                 } else {
                     inputUser.setRoleName("不明な役職");

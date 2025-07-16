@@ -4,7 +4,7 @@ import com.fullness.keihiseisan.model.dao.RoleDAO;
 import com.fullness.keihiseisan.model.exception.BusinessException;
 import com.fullness.keihiseisan.model.exception.SystemException;
 import com.fullness.keihiseisan.model.util.ConnectionManager;
-import com.fullness.keihiseisan.model.value.role;
+import com.fullness.keihiseisan.model.value.Role;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -23,7 +23,7 @@ public class RoleService {
      * @return 役職情報のリスト
      * @throws SystemException 取得に失敗した場合
      */
-    public List<role> getAllRoles() throws SystemException {
+    public List<Role> getAllRoles() throws SystemException {
         try (ConnectionManager connectionManager = new ConnectionManager()) {
             RoleDAO roleDAO = new RoleDAO(connectionManager.getConnection());
             return roleDAO.selectAll();
@@ -42,11 +42,11 @@ public class RoleService {
      * @throws BusinessException 役職が見つからない場合
      * @throws SystemException 取得に失敗した場合
      */
-    public role getRoleById(int roleId) throws BusinessException, SystemException {
+    public Role getRoleById(int roleId) throws BusinessException, SystemException {
         logger.info("役職情報の取得開始: 役職ID=" + roleId);
         try (ConnectionManager connectionManager = new ConnectionManager()) {
             RoleDAO roleDAO = new RoleDAO(connectionManager.getConnection());
-            role role = roleDAO.findById(roleId);
+            Role role = roleDAO.findById(roleId);
             if (role == null) {
                 throw new BusinessException(
                     "指定された役職が見つかりません", 

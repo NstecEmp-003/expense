@@ -21,7 +21,7 @@ import com.fullness.keihiseisan.model.util.ValidationUtil;
 import com.fullness.keihiseisan.model.value.Account;
 import com.fullness.keihiseisan.model.value.ExpenseApplication;
 import com.fullness.keihiseisan.model.value.User;
-import com.fullness.keihiseisan.model.value.role;
+import com.fullness.keihiseisan.model.value.Role;
 import com.fullness.keihiseisan.model.util.FileUploadUtil;
 
 /**
@@ -48,7 +48,7 @@ public class ApplyInputServlet extends BaseServlet {
             // ログインチェック
             loginCheck(req, resp);
             // 権限チェック
-            roleCheck(req, resp, role.EMPLOYEE);
+            roleCheck(req, resp, Role.EMPLOYEE);
             // CSRFトークンの生成と設定
             String csrfToken = UUID.randomUUID().toString();
             HttpSession session = req.getSession(false);
@@ -90,7 +90,7 @@ public class ApplyInputServlet extends BaseServlet {
             // ログインチェック
             loginCheck(req, resp);
             // 権限チェック
-            roleCheck(req, resp, role.EMPLOYEE);
+            roleCheck(req, resp, Role.EMPLOYEE);
             // CSRFトークンの検証
             HttpSession session = req.getSession(false);
             String sessionToken = (String) session.getAttribute("csrfToken");

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.fullness.keihiseisan.model.value.role;
+import com.fullness.keihiseisan.model.value.Role;
 import com.fullness.keihiseisan.model.exception.SystemException;
 
 /**
@@ -35,15 +35,15 @@ public class RoleDAO {
      * @return List<Role>
      * @throws SystemException データベース処理中にエラーが発生した場合
      */
-    public List<role> selectAll() throws SystemException {
-        List<role> list = new ArrayList<>();
+    public List<Role> selectAll() throws SystemException {
+        List<Role> list = new ArrayList<>();
         String sql = "SELECT role_id, role_name FROM roles ORDER BY role_id";
         try (
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery()
         ) {
             while (rs.next()) {
-                role dto = new role();
+                Role dto = new Role();
                 dto.setRoleId(rs.getInt("role_id"));
                 dto.setRoleName(rs.getString("role_name"));
                 list.add(dto);
@@ -61,7 +61,7 @@ public class RoleDAO {
      * @return Role (見つからない場合は null)
      * @throws SystemException データベース処理中にエラーが発生した場合
      */
-    public role findById(int roleId) throws SystemException {
+    public Role findById(int roleId) throws SystemException {
         String sql = "SELECT role_id, role_name FROM roles WHERE role_id = ?";
         try (
             PreparedStatement stmt = connection.prepareStatement(sql)
@@ -69,7 +69,7 @@ public class RoleDAO {
             stmt.setInt(1, roleId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    role dto = new role();
+                    Role dto = new Role();
                     dto.setRoleId(rs.getInt("role_id"));
                     dto.setRoleName(rs.getString("role_name"));
                     return dto;

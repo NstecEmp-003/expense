@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class role {
+public class Role {
     /** 役職ID定数 */
     public static final int EMPLOYEE = 1; // 一般
     public static final int MANAGER = 2;  // 課長
