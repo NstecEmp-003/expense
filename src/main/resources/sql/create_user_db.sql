@@ -1,0 +1,2 @@
+CREATE ROLE expense WITH LOGIN PASSWORD 'expense';
+CREATE DATABASE expense OWNER expense;

@@ -1,0 +1,567 @@
+/* --- Global & Common Styles --- */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.nav-left {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+nav a:hover {
+    background-color: #3e8e41;
+    border-radius: 4px;
+}
+
+.user-info {
+    margin-right: 20px;
+}
+
+
+footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    bottom: 0;
+    width: 100%;
+    /* margin-top: auto; Remove fixed positioning or adjust margin-top */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    margin-bottom: 100px; /* Keep space above footer */
+}
+
+.container h1 {
+    text-align: center;
+    margin-bottom: 2rem; /* Add some space below title */
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 1rem;
+    margin-right: 0.5rem; /* Add margin between buttons */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    /* margin-left: 1rem; Handled by common .btn margin-right */
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid #007bff;
+    color: #007bff;
+}
+
+.btn-outline:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-link {
+    color: #007bff;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.button-group {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+}
+
+.button-group form {
+    display: inline-block; /* Keep buttons side-by-side */
+    margin: 0 0.5rem;
+}
+
+
+/* --- Form Styles --- */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    /* display: block; */ /* Keep inline or adjust based on layout */
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="password"],
+select,
+textarea {
+    /* width: 100%; */ /* Commented out - adjust if full width is needed */
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding doesn't increase width */
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+    width: 100%; /* Textareas usually benefit from full width */
+}
+
+.form-text {
+    color: #666;
+    font-size: 0.875rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.required {
+    color: red;
+    margin-left: 0.25rem; /* Add space before asterisk */
+}
+
+.error{
+    color: red;
+    text-align: center;
+}
+
+.error-messages {
+    color: red;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid red;
+    background-color: #fff3f3;
+    border-radius: 4px; /* Added for consistency */
+}
+
+.menu-buttons {
+    text-align: center;
+    margin-bottom: 2rem; /* Add space below menu buttons */
+}
+
+/* --- Login Page Styles --- */
+.login-form {
+    text-align: center;
+}
+
+
+
+/* --- List Page Styles --- */
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+/* Table Styles (Common for List and Apply) */
+.expense-table,
+.apply-table {
+    width: 100%; /* Default to full width */
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem; /* Add space below tables */
+}
+
+.expense-table th,
+.expense-table td,
+.apply-table th,
+.apply-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.expense-table th,
+.apply-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #495057;
+    white-space: nowrap; /* Keep header text on one line */
+}
+
+.expense-table tr:hover,
+.apply-table tr:hover {
+    background-color: #f1f3f5; /* Slightly different hover color */
+}
+
+/* Specific Table Adjustments */
+.apply-table {
+    width: 70%; /* Specific width for apply table */
+    margin: 0 auto 2rem auto; /* Center and add bottom margin */
+}
+
+.apply-table td {
+     padding: .5rem 1rem; /* Adjust padding for apply table */
+}
+
+.amount {
+    text-align: right;
+    /* font-family: monospace; */ /* Optional: uncomment if needed */
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-align: center; /* Center text within badge */
+    min-width: 80px; /* Ensure minimum width for consistency */
+}
+
+/* Status Colors */
+.status-1 { /* 申請中 */
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status-2 { /* 課長承認済 */
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-3 { /* 承認完了 */
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-8, .status-9 { /* 却下 */
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.no-data {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-top: 2rem; /* Add space if table is empty */
+}
+
+.welcome-message {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 2rem; /* Add space below welcome message */
+}
+
+
+/* --- Detail Page Styles --- */
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.detail-content {
+    max-width: 800px;
+    margin: 0 auto 2rem auto; /* Center and add bottom margin */
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.detail-group {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee; /* Add border between groups */
+}
+
+.detail-group:last-child {
+    border-bottom: none; /* Remove border for the last group */
+}
+
+.detail-group label {
+    display: block; /* Ensure label is on its own line */
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.detail-value {
+    font-size: 1.1rem;
+    padding: 0.25rem 0; /* Adjust padding */
+}
+
+.detail-value.amount {
+    font-family: monospace;
+    font-size: 1.2rem;
+    color: #28a745;
+    font-weight: bold; /* Make amount stand out */
+}
+
+.description-text { /* Moved here as it's often used in details */
+    white-space: pre-wrap;
+    margin: 0;
+    font-family: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 1.1rem; /* Match detail-value */
+    line-height: 1.6; /* Improve readability */
+}
+
+.rejection-reason {
+    color: #dc3545;
+    padding: 1rem;
+    background-color: #f8d7da; /* Use a slightly different red background */
+    border: 1px solid #f5c6cb; /* Add border */
+    border-radius: 4px;
+    margin-top: 1rem; /* Add space above */
+}
+
+.approval-history {
+    margin-top: 0rem; /* Space above history section */
+}
+
+.approval-history .entry { /* Style each history entry */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed #eee; /* Dashed separator */
+}
+
+.approval-history .entry:last-child {
+    border-bottom: none;
+}
+
+.approval-history .approver {
+    font-weight: bold;
+}
+
+.approval-history .approval-date {
+    color: #666;
+    font-size: 0.9rem; /* Smaller font for date */
+}
+
+.approval-form {
+    margin-top: 2rem; /* Increase space before approval form */
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.approval-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 1rem; /* Space below textarea */
+}
+
+
+/* --- Confirmation Page Styles --- */
+.confirmation-content {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem; /* Increase padding */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+.confirm-group {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem; /* Increase padding */
+}
+
+.confirm-group:last-child {
+    border-bottom: none;
+}
+
+.confirm-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #555; /* Slightly darker label */
+}
+
+.confirm-value {
+    font-size: 1.1rem;
+    padding: 0.5rem 0; /* Adjust padding */
+    word-wrap: break-word; /* Prevent long values from overflowing */
+}
+
+/* .description-text reused from Detail Styles */
+
+
+/* --- Complete Page Styles --- */
+.complete-content {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 2rem;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.complete-icon {
+    color: #28a745;
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.complete-icon i {
+    animation: fadeInScale 0.5s ease-out;
+}
+
+.complete-message {
+    margin: 2rem 0;
+    color: #666;
+    font-size: 1.1rem; /* Slightly larger font */
+}
+
+.complete-message strong {
+    color: #333;
+    font-size: 1.3rem; /* Larger emphasis */
+    display: block; /* Make strong text block */
+    margin-bottom: 0.5rem;
+}
+
+/* Animation */
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Button Placement for Complete Page */
+.complete-content .button-group {
+    margin-top: 3rem;
+}
+
+.complete-content .button-group .btn {
+    margin: 0 0.5rem;
+    min-width: 160px;
+}
+
+
+/* --- Other Specific Styles --- */
+.receipt-thumbnail {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    transition: box-shadow 0.3s ease; /* Smoother transition */
+    margin-bottom: 10px;
+    display: inline-block; /* Allow inline display */
+    height: auto; /* Maintain aspect ratio */
+    vertical-align: middle; /* Align with text if needed */
+}
+
+.receipt-thumbnail:hover {
+    box-shadow: 0 0 5px 2px rgba(0, 140, 186, 0.5); /* Enhanced hover effect */
+}
+
+/* --- Filter Form Styles --- */
+.filter-form {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+.filter-form h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+.filter-item {
+    flex: 1;
+    min-width: 200px;
+}
+.filter-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.filter-item input, .filter-item select {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}

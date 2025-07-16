@@ -1,0 +1,42 @@
+@startuml
+title ログイン
+!theme plain
+
+actor ユーザー as user
+participant "LoginServlet" as login_servlet
+participant "MenuServlet" as menu_servlet
+participant "LoginService" as login_svc
+participant "AdminDAO" as admin_dao
+participant "Connection\nManager" as conn_mgr
+database "DB" as db
+
+user -> login_servlet++ : GET /login\ndoGet()
+login_servlet --> user--: ログイン画面を表示
+user -> user : アカウント情報入力
+user -> login_servlet++ : POST /login\ndoPost()
+login_servlet -> login_svc++ : login(id,password)
+login_svc -> conn_mgr++ : getConnection()
+conn_mgr -> db++ : DB接続
+db --> conn_mgr-- : Connection
+conn_mgr --> login_svc-- : Connection
+login_svc -> admin_dao++ : selectByIdAndPassword\n(id,password)
+admin_dao -> db++ : SQL SELECT
+db --> admin_dao-- : Admin
+admin_dao --> login_svc-- : Admin
+login_svc -> conn_mgr++ : closeConnection\n(Connection)
+conn_mgr -> db++ : DB接続解除
+db --> conn_mgr-- : void
+conn_mgr --> login_svc-- : void
+login_svc --> login_servlet-- : boolean
+
+alt ログイン成功
+    login_servlet -> login_servlet : セッションに\nログイン情報をセット
+    login_servlet --> user : メニュー画面へリダイレクト
+    user -> menu_servlet++ : GET /menu\ndoGet()
+    menu_servlet --> user-- : メニュー画面を表示
+else ログイン失敗
+    login_servlet -> login_servlet : エラーメッセージを\nリクエストスコープに\nセット
+    login_servlet -> user-- : ログイン画面を表示
+end
+
+@enduml
