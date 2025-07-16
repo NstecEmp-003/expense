@@ -46,9 +46,9 @@ public class ConnectionManager implements AutoCloseable {
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
         	connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/expense", 
-                "expense", 
-                "expense");
+                "jdbc:postgresql://localhost:5433/expense", 
+                "postgres", 
+                "postgres");
             connection.setAutoCommit(false);
         }
         return connection;
