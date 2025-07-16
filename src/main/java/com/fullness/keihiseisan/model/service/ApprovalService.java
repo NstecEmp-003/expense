@@ -22,7 +22,7 @@ import com.fullness.keihiseisan.model.value.role;
  */
 public class ApprovalService {
     /* 承認閾値（金額50,000円以上の場合） */
-    private static final int approvalThreshold = 50000;
+    private static final int APPROVAL_THRESHOLD= 50000;
     /* ロガー */
     private static final Logger logger = Logger.getLogger(ApprovalService.class.getName());
     /**
@@ -138,7 +138,7 @@ public class ApprovalService {
         // 部長の場合：課長承認済のみ承認可能（金額50,000円以上の場合）
         if (approver.getRoleId() == role.DIRECTOR) { // 部長
             return application.getStatusId() == StatusDAO.STATUS_MANAGER_APPROVED &&
-                   application.getAmount() > approvalThreshold;
+                   application.getAmount() > APPROVAL_THRESHOLD;
         }
         return false;
     }
@@ -201,7 +201,7 @@ public class ApprovalService {
         // 承認の場合
         if (approver.getRoleId() == role.MANAGER) {
             // 課長承認の場合、金額で分岐
-            return application.getAmount() >= approvalThreshold ?
+            return application.getAmount() >= APPROVAL_THRESHOLD ?
                    StatusDAO.STATUS_MANAGER_APPROVED : StatusDAO.STATUS_APPROVED_COMPLETED;
         } else {
             return StatusDAO.STATUS_APPROVED_COMPLETED;
