@@ -50,7 +50,7 @@ public class ExpenseApplicationService {
      * @param expense
      * @return
      */
-    private List<String> validateApplication(ExpenseApplication expense) {
+    public List<String> validateApplication(ExpenseApplication expense) {
         List<String> errors = new ArrayList<>();
         // 申請日の検証
         Date applicationDate = expense.getApplicationDate();
