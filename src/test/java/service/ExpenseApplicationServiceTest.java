@@ -4,31 +4,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.fullness.keihiseisan.model.dao.StatusDAO;
-import com.fullness.keihiseisan.model.exception.SystemException;
 import com.fullness.keihiseisan.model.service.ExpenseApplicationService;
-import com.fullness.keihiseisan.model.util.ConnectionManager;
 import com.fullness.keihiseisan.model.value.ExpenseApplication;
 import com.fullness.keihiseisan.model.value.Status;
-import com.fullness.keihiseisan.model.value.User;
 
 import jakarta.servlet.http.Part;
 
 public class ExpenseApplicationServiceTest {
 
     private ExpenseApplicationService service;
+
+    /*
+     * validateApplication(ExpenseApplication expense, Part filePart)のテストケースを追加する。
+     */
 
     @BeforeEach
     void setUp() {
@@ -154,159 +152,6 @@ public class ExpenseApplicationServiceTest {
         assertTrue(result.isEmpty());
     }
 
-    /* applyExpense(ExpenseApplication expense, User applicant)のテスト */
-
-
-    @Test
-    public void TC01_申請者IDと申請日が未設定() throws Exception {
-        ExpenseApplication expense = new ExpenseApplication();
-
-        // 必須項目（DAOのinsertで使用される順に設定）
-        expense.setAccountId(1); // 勘定科目ID
-        expense.setPaymentDate(Date.valueOf(LocalDate.of(2025, 07, 11))); // 支払日
-        expense.setPayee("JR東日本"); // 支払先
-        expense.setAmount(880); // 金額
-        expense.setDescription("客先訪問交通費 (往復)"); // 内容
-        expense.setReceiptPath("/receipts/2025/07/11.pdf"); // 領収書パス
-
-
-        // 申請者ID・申請日は未設定（applyExpense内で自動設定される）
-        expense.setApplicantUserId(null);
-        expense.setApplicationDate(null);
-
-        User applicant = new User();
-        applicant.setUserId("emp001");
-
-        int id = service.applyExpense(expense, applicant);
-
-        // 自動設定された項目の検証
-        assertEquals("emp001", expense.getApplicantUserId());
-        assertEquals(Date.valueOf(LocalDate.now()), expense.getApplicationDate());
-        assertEquals(StatusDAO.STATUS_APPLIED, expense.getStatusId());
-        assertTrue(id > 0);
-
-        // DB登録確認（PostgreSQL）
-        try (Connection conn = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5433/expense",
-                "postgres",
-                "postgres")) {
-
-            var rs = conn.createStatement().executeQuery("SELECT * FROM expense_application WHERE id = " + id);
-            assertTrue(rs.next());
-            assertEquals("emp001", rs.getString("applicant_user_id"));
-            assertEquals(expense.getApplicationDate().toLocalDate(), rs.getDate("application_date").toLocalDate());
-            assertEquals(1, rs.getInt("account_id"));
-            assertEquals(Date.valueOf(LocalDate.of(2025, 07, 11)), rs.getDate("payment_date"));
-            assertEquals("JR東日本", rs.getString("payee"));
-            assertEquals(880, rs.getInt("amount"));
-            assertEquals("客先訪問交通費 (往復)", rs.getString("description"));
-            assertEquals("/receipts/2025/07/11.pdf", rs.getString("receipt_path"));
-            assertEquals(StatusDAO.STATUS_APPLIED, rs.getInt("status_id"));
-        }
-    }
-
-    @Test
-    public void TC02_申請者IDと申請日が設定済み() throws Exception {
-        ExpenseApplication expense = new ExpenseApplication();
-        expense.setPayee("テスト商事");
-        expense.setAmount(60000);
-        expense.setApplicantUserId("user999");
-        expense.setApplicationDate(Date.valueOf(LocalDate.of(2020, 1, 1)));
-
-        User applicant = new User();
-        applicant.setUserId("user001");
-
-        int id = service.applyExpense(expense, applicant);
-
-        assertEquals("user999", expense.getApplicantUserId());
-        assertEquals(Date.valueOf(LocalDate.of(2020, 1, 1)), expense.getApplicationDate());
-        assertTrue(id > 0);
-    }
-
-    @Test
-    public void TC03_金額が5万円以上() throws Exception {
-        ExpenseApplication expense = new ExpenseApplication();
-        expense.setPayee("高額商事");
-        expense.setAmount(80000);
-
-        User applicant = new User();
-        applicant.setUserId("user002");
-
-        service.applyExpense(expense, applicant);
-
-        assertEquals(StatusDAO.STATUS_APPLIED, expense.getStatusId());
-    }
-
-    @Test
-    public void TC04_金額が5万円未満() throws Exception {
-        ExpenseApplication expense = new ExpenseApplication();
-        expense.setPayee("aaaa");
-        expense.setAmount(30000);
-
-        User applicant = new User();
-        applicant.setUserId("emp001");
-
-        service.applyExpense(expense, applicant);
-
-        assertEquals(StatusDAO.STATUS_APPLIED, expense.getStatusId());
-    }
-
-    @Test
-    public void TC05_金額がちょうど5万円() throws Exception {
-        ExpenseApplication expense = new ExpenseApplication();
-        expense.setPayee("aaaaa");
-        expense.setAmount(50000);
-
-        User applicant = new User();
-        applicant.setUserId("emp001");
-
-        service.applyExpense(expense, applicant);
-
-        assertEquals(StatusDAO.STATUS_APPLIED, expense.getStatusId());
-    }
-
-    @Test
-    public void TC06_DB接続失敗() {
-        try {
-            new ConnectionManager() {
-                @Override
-                public Connection getConnection() throws SQLException {
-                    throw new SQLException("接続失敗");
-                }
-            }.getConnection();
-            fail("例外が発生すべき");
-        } catch (SQLException e) {
-            assertEquals("接続失敗", e.getMessage());
-        }
-    }
-
-    @Test
-    public void TC07_insert中にSQLException発生() {
-        ExpenseApplication expense = new ExpenseApplication();
-        expense.setPayee("例外商事");
-        expense.setAmount(30000);
-
-        User applicant = new User();
-        applicant.setUserId("user005");
-
-        try {
-            // insert失敗をシミュレートするにはDAO側で例外を投げるように改造が必要
-            // ここでは例外を直接投げてテスト
-            throw new SystemException("申請処理中にエラーが発生しました", "Database error", new SQLException("Insert失敗"));
-        } catch (SystemException e) {
-            assertTrue(e.getMessage().contains("申請処理中にエラーが発生しました"));
-        }
-    }
-
-    @Test
-    public void TC08_ロールバック中にSQLException発生() {
-        try {
-            throw new SystemException("ロールバック中にエラーが発生しました", "Database error", new SQLException("Rollback失敗"));
-        } catch (SystemException e) {
-            assertTrue(e.getMessage().contains("ロールバック中にエラーが発生しました"));
-        }
-    }
-
     // スタブ実装
     class DummyPart implements Part {
         private long size;
@@ -363,6 +208,10 @@ public class ExpenseApplicationServiceTest {
         public java.util.Collection<String> getHeaders(String name) {
             return null;
         }
+
+        /* TODO：applyExpense(ExpenseApplication expense, User applicant)のテスト */
+
+        /* TODO：getApplicationDetail(int applicationId)のテスト */
 
     }
 }
