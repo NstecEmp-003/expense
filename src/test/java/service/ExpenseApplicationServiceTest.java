@@ -154,76 +154,56 @@ public class ExpenseApplicationServiceTest {
         assertTrue(result.isEmpty());
     }
 
-    private Connection connection;
+    /* applyExpense(ExpenseApplication expense, User applicant)のテスト */
 
-    @BeforeEach
-    public void setup() throws SQLException {
-        service = new ExpenseApplicationService();
 
+    @Test
+    public void TC01_申請者IDと申請日が未設定() throws Exception {
+        ExpenseApplication expense = new ExpenseApplication();
+
+        // 必須項目（DAOのinsertで使用される順に設定）
+        expense.setAccountId(1); // 勘定科目ID
+        expense.setPaymentDate(Date.valueOf(LocalDate.of(2025, 07, 11))); // 支払日
+        expense.setPayee("JR東日本"); // 支払先
+        expense.setAmount(880); // 金額
+        expense.setDescription("客先訪問交通費 (往復)"); // 内容
+        expense.setReceiptPath("/receipts/2025/07/11.pdf"); // 領収書パス
+
+
+        // 申請者ID・申請日は未設定（applyExpense内で自動設定される）
+        expense.setApplicantUserId(null);
+        expense.setApplicationDate(null);
+
+        User applicant = new User();
+        applicant.setUserId("emp001");
+
+        int id = service.applyExpense(expense, applicant);
+
+        // 自動設定された項目の検証
+        assertEquals("emp001", expense.getApplicantUserId());
+        assertEquals(Date.valueOf(LocalDate.now()), expense.getApplicationDate());
+        assertEquals(StatusDAO.STATUS_APPLIED, expense.getStatusId());
+        assertTrue(id > 0);
+
+        // DB登録確認（PostgreSQL）
         try (Connection conn = DriverManager.getConnection(
                 "jdbc:postgresql://localhost:5433/expense",
                 "postgres",
                 "postgres")) {
 
-            conn.createStatement().executeUpdate("""
-                        CREATE TABLE IF NOT EXISTS expense_application (
-                            id SERIAL PRIMARY KEY,
-                            applicant_user_id VARCHAR(255),
-                            payee VARCHAR(255),
-                            amount INT,
-                            application_date DATE,
-                            status_id INT
-                        );
-                    """);
+            var rs = conn.createStatement().executeQuery("SELECT * FROM expense_application WHERE id = " + id);
+            assertTrue(rs.next());
+            assertEquals("emp001", rs.getString("applicant_user_id"));
+            assertEquals(expense.getApplicationDate().toLocalDate(), rs.getDate("application_date").toLocalDate());
+            assertEquals(1, rs.getInt("account_id"));
+            assertEquals(Date.valueOf(LocalDate.of(2025, 07, 11)), rs.getDate("payment_date"));
+            assertEquals("JR東日本", rs.getString("payee"));
+            assertEquals(880, rs.getInt("amount"));
+            assertEquals("客先訪問交通費 (往復)", rs.getString("description"));
+            assertEquals("/receipts/2025/07/11.pdf", rs.getString("receipt_path"));
+            assertEquals(StatusDAO.STATUS_APPLIED, rs.getInt("status_id"));
         }
     }
-
-@Test
-public void TC01_申請者IDと申請日が未設定() throws Exception {
-    ExpenseApplication expense = new ExpenseApplication();
-
-    // 必須項目（DAOのinsertで使用される順に設定）
-    expense.setAccountId(101); // 勘定科目ID（例：旅費交通費）
-    expense.setPaymentDate(Date.valueOf(LocalDate.of(2024, 12, 1))); // 支払日
-    expense.setPayee("テスト商事"); // 支払先
-    expense.setAmount(60000); // 金額
-    expense.setDescription("備品購入"); // 内容
-    expense.setReceiptPath("/receipts/2024/12/01.pdf"); // 領収書パス
-
-    // 申請者ID・申請日は未設定（applyExpense内で自動設定される）
-    expense.setApplicantUserId(null);
-    expense.setApplicationDate(null);
-
-    User applicant = new User();
-    applicant.setUserId("user001");
-
-    int id = service.applyExpense(expense, applicant);
-
-    // 自動設定された項目の検証
-    assertEquals("user001", expense.getApplicantUserId());
-    assertEquals(Date.valueOf(LocalDate.now()), expense.getApplicationDate());
-    assertEquals(StatusDAO.STATUS_APPLIED, expense.getStatusId());
-    assertTrue(id > 0);
-
-    // DB登録確認（PostgreSQL）
-    try (Connection conn = DriverManager.getConnection(
-            "jdbc:postgresql://localhost:5433/expense",
-            "postgres",
-            "postgres")) {
-
-        var rs = conn.createStatement().executeQuery("SELECT * FROM expense_application WHERE id = " + id);
-        assertTrue(rs.next());
-        assertEquals("user001", rs.getString("applicant_user_id"));
-        assertEquals(Date.valueOf(LocalDate.now()), rs.getDate("application_date"));
-        assertEquals(101, rs.getInt("account_id"));
-        assertEquals(Date.valueOf(LocalDate.of(2024, 12, 1)), rs.getDate("payment_date"));
-        assertEquals("テスト商事", rs.getString("payee"));
-        assertEquals(60000, rs.getInt("amount"));
-        assertEquals("備品購入", rs.getString("description"));
-        assertEquals("/receipts/2024/12/01.pdf", rs.getString("receipt_path"));
-        assertEquals(StatusDAO.STATUS_APPLIED, rs.getInt("status_id"));
-    }
-}
 
     @Test
     public void TC02_申請者IDと申請日が設定済み() throws Exception {
@@ -260,11 +240,11 @@ public void TC01_申請者IDと申請日が未設定() throws Exception {
     @Test
     public void TC04_金額が5万円未満() throws Exception {
         ExpenseApplication expense = new ExpenseApplication();
-        expense.setPayee("低額商事");
+        expense.setPayee("aaaa");
         expense.setAmount(30000);
 
         User applicant = new User();
-        applicant.setUserId("user003");
+        applicant.setUserId("emp001");
 
         service.applyExpense(expense, applicant);
 
@@ -274,11 +254,11 @@ public void TC01_申請者IDと申請日が未設定() throws Exception {
     @Test
     public void TC05_金額がちょうど5万円() throws Exception {
         ExpenseApplication expense = new ExpenseApplication();
-        expense.setPayee("境界商事");
+        expense.setPayee("aaaaa");
         expense.setAmount(50000);
 
         User applicant = new User();
-        applicant.setUserId("user004");
+        applicant.setUserId("emp001");
 
         service.applyExpense(expense, applicant);
 
