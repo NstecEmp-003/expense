@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.fullness.keihiseisan.model.dao.UserDAO;
 import com.fullness.keihiseisan.model.exception.BusinessException;
 import com.fullness.keihiseisan.model.exception.SystemException;
+import com.fullness.keihiseisan.model.service.LoginService;
 import com.fullness.keihiseisan.model.util.ConnectionManager;
 import com.fullness.keihiseisan.model.util.PasswordUtil;
 import com.fullness.keihiseisan.model.value.User;

@@ -63,11 +63,12 @@ public class LoginServlet extends BaseServlet {
             // ユーザーIDとパスワードの取得
             String userId = request.getParameter("userId");
             String password = request.getParameter("password");
+            
             if (userId == null || userId.isEmpty() || password == null || password.isEmpty()) {
-                 session.removeAttribute("csrfToken");
-                 request.setAttribute("errorMessage", "ユーザーIDとパスワードを入力してください。");
-                 request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
-                 return;
+                session.removeAttribute("csrfToken");
+                request.setAttribute("errorMessage", "ユーザーIDとパスワードを入力してください。");
+                request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+                return;
             }
             // ログイン処理
             LoginService loginService = new LoginService();

@@ -39,8 +39,16 @@ public class ExpenseApplicationService {
         List<String> error_list = validateApplication(expense);
         // ファイルが添付されている場合のみ検証
         if (filePart != null && filePart.getSize() > 0) {
+            // ファイルサイズ検証
             if (!ValidationUtil.isFileSizeValid(filePart.getSize())) {
                 error_list.add("領収書のファイルサイズは 5MB 以下にしてください。");
+            }
+
+        // ファイル形式（MIMEタイプ）検証
+        String contentType = filePart.getContentType();
+        if (contentType == null ||
+            !(contentType.equalsIgnoreCase("image/jpeg") || contentType.equalsIgnoreCase("image/png"))) {
+            error_list.add("領収書は JPEG または PNG 形式のファイルを選択してください。");
             }
         }
         return error_list;

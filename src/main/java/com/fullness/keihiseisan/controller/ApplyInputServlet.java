@@ -119,6 +119,7 @@ public class ApplyInputServlet extends BaseServlet {
             System.out.println("支払先の取得: " + payee);
             System.out.println("金額の取得: " + amount);
             System.out.println("内容（詳細）の取得: " + description);
+
             // DTOに値を設定
             expense.setApplicationDate(ValidationUtil.isEmpty(applicationDate) ? null : Date.valueOf(applicationDate));
             expense.setAccountId(ValidationUtil.isEmpty(accountId) ? 0 : Integer.parseInt(accountId));
