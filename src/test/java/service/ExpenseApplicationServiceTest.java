@@ -1,36 +1,27 @@
 package service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.fullness.keihiseisan.model.dao.StatusDAO;
-import com.fullness.keihiseisan.model.exception.SystemException;
 import com.fullness.keihiseisan.model.service.ExpenseApplicationService;
-import com.fullness.keihiseisan.model.util.ConnectionManager;
 import com.fullness.keihiseisan.model.value.ExpenseApplication;
 import com.fullness.keihiseisan.model.value.Status;
-import com.fullness.keihiseisan.model.value.User;
 
 import jakarta.servlet.http.Part;
 
 public class ExpenseApplicationServiceTest {
 
     private ExpenseApplicationService service;
+
+/*     validateApplication(ExpenseApplication expense, Part filePart)のテストケースを追加する。 */
 
     @BeforeEach
     void setUp() {
@@ -156,9 +147,9 @@ public class ExpenseApplicationServiceTest {
         assertTrue(result.isEmpty());
     }
 
-    /* applyExpense(ExpenseApplication expense, User applicant)のテスト */
+    /* TODO：applyExpense(ExpenseApplication expense, User applicant)のテスト */
 
-   
+    /* TODO：getApplicationDetail(int applicationId)のテスト */
 
     // スタブ実装
     class DummyPart implements Part {
