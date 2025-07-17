@@ -50,7 +50,7 @@ public class UserDAO {
                 if (rs.next()) {
                     User user = new User();
                     user.setUserId(rs.getString("user_id"));
-                   // user.setPassword(rs.getString("password")); // セキュリティリスク！
+                    user.setPassword(rs.getString("password")); // セキュリティリスク！
                     user.setSalt(rs.getString("salt")); // saltを取得
                     user.setUserName(rs.getString("user_name"));
                     user.setDepartmentId(rs.getInt("department_id"));
