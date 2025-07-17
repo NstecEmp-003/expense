@@ -1,8 +1,11 @@
 package service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -21,7 +24,9 @@ public class ExpenseApplicationServiceTest {
 
     private ExpenseApplicationService service;
 
-/*     validateApplication(ExpenseApplication expense, Part filePart)のテストケースを追加する。 */
+    /*
+     * validateApplication(ExpenseApplication expense, Part filePart)のテストケースを追加する。
+     */
 
     @BeforeEach
     void setUp() {
@@ -147,10 +152,6 @@ public class ExpenseApplicationServiceTest {
         assertTrue(result.isEmpty());
     }
 
-    /* TODO：applyExpense(ExpenseApplication expense, User applicant)のテスト */
-
-    /* TODO：getApplicationDetail(int applicationId)のテスト */
-
     // スタブ実装
     class DummyPart implements Part {
         private long size;
@@ -207,6 +208,10 @@ public class ExpenseApplicationServiceTest {
         public java.util.Collection<String> getHeaders(String name) {
             return null;
         }
+
+        /* TODO：applyExpense(ExpenseApplication expense, User applicant)のテスト */
+
+        /* TODO：getApplicationDetail(int applicationId)のテスト */
 
     }
 }
