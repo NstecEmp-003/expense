@@ -81,7 +81,7 @@ public class ExpenseApplicationDAO {
             stmt.setDate(i++, expense.getApplicationDate());
             stmt.setInt(i++, expense.getAccountId());
             stmt.setDate(i++, expense.getPaymentDate());
-            stmt.setString(i++, expense.getPayee());
+            stmt.setString(i++, expense.getPayee());    
             stmt.setInt(i++, expense.getAmount());
             stmt.setString(i++, expense.getDescription());
             stmt.setString(i++, expense.getReceiptPath());
