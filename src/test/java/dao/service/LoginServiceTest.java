@@ -26,7 +26,7 @@ public class LoginServiceTest {
     private LoginService loginService;
     private UserDAO userDAO;
     private Connection connection;
-
+//a
     /**
      * テストの前処理
      */
