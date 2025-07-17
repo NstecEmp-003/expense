@@ -94,4 +94,4 @@ INSERT INTO expense_applications (applicant_user_id, application_date, account_i
 ('emp001', CURRENT_DATE - INTERVAL '6 day', 1, CURRENT_DATE - INTERVAL '6 day', '日本タクシー', 20000, '客先訪問交通費 (往復)', 1, NULL, NULL, NULL, NULL, NULL), -- 課長却下予定
 ('emp001', CURRENT_DATE - INTERVAL '6 day', 1, CURRENT_DATE - INTERVAL '6 day', '叙々苑', 60000, '懇親会費用', 2, 'mgr001', CURRENT_DATE - INTERVAL '5 day', NULL, NULL, NULL), -- 部長却下予定
 ('emp001', CURRENT_DATE - INTERVAL '2 day', 2, CURRENT_DATE - INTERVAL '2 day', 'ビックカメラ', 80000, 'ノートパソコン', 1, NULL, NULL, NULL, NULL, NULL), -- 申請中
-('emp001', CURRENT_DATE - INTERVAL '4 day', 2, CURRENT_DATE - INTERVAL '4 day', 'ユニクロ', 80000, 'シャツ', 2, 'mgr001', CURRENT_DATE - INTERVAL '3 day', NULL, NULL, NULL); -- 課長承認済み
+('emp001', CURRENT_DATE - INTERVAL '4 day', 2, CURRENT_DATE - INTERVAL '4 day', 'ユニクロ', 80000, 'シャツ', 2, 'mgr001', CURRENT_DATE - INTERVAL '3 day', NULL, NULL, NULL);

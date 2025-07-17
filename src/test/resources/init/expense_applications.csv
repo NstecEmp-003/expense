@@ -1,4 +1,4 @@
-applivation_id, applicant_user_id, application_date, accoun_id, payment_date, payee, amount, description, receipt_path, status_id, approver1_user_id, approval1_date, approval2_user_id, approval2_date, rejection_reason
+application_id, applicant_user_id, application_date, accoun_id, payment_date, payee, amount, description, receipt_path, status_id, approver1_user_id, approval1_date, approval2_user_id, approval2_date, rejection_reason
 1,  "emp001","2025-07-11",1,"2025-07-11","JR東日本",880,"客先訪問交通費 (往復)",,1,,,,,
 2,	"emp001","2025-07-13",2,"2025-07-13","文具店XYZ",45000,"開発用ディスプレイ購入",,1,,,,,
 3,	"emp002","2025-07-09",1,"2025-07-09","高速バス",60000,"遠方出張交通費",,2,"mgr002","2025-07-10 00:00:00",,,
@@ -11,4 +11,3 @@ applivation_id, applicant_user_id, application_date, accoun_id, payment_date, pa
 10,	"emp001","2025-07-16",1,"2025-07-16","JR東日本",2000,"出張",,1,,,,,
 11,	"emp001","2025-07-16",1,"2025-07-16","JR東日本",2000,"出張",,8,"mgr001","2025-07-16 11:27:52.123184",,,"なんとなくなんとなく"
 12,	"emp001","2025-07-16",1,"2025-07-16","JR東日本",2000,"出張",,3,"mgr001","2025-07-16 11:25:40.193583",,,
-13,	"emp001","2025-07-16",1,"2025-07-16","JR東日本",2000,"出張",,3,"mgr001","2025-07-16 11:25:40.193583",,,
